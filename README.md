@@ -1,11 +1,13 @@
 # Carpet Bomb
 Load test cli app
 
---url: URL do serviço a ser testado.
+--url: URL of the service to be tested.
 
---requests: Número total de requests.
+--requests: Total number of requests.
 
---concurrency: Número de chamadas simultâneas.
+--concurrency: Number of concurrent calls.
+
+--help: help
 
 ## Build
 ```shell
