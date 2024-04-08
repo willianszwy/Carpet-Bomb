@@ -66,6 +66,10 @@ func (lt *LoadTest) Run() {
 	println("Results:")
 	println("Total time:", time.Since(startTime).String())
 	println("Total requests:", lt.req)
+
+	total200 := lt.ResponseStatus[200]
+	println("Total 200 request:", total200)
+
 	for key, value := range lt.ResponseStatus {
 		println("status:", key, "total:", value)
 	}
