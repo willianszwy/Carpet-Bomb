@@ -16,5 +16,5 @@ docker build -t carpet-bomb .
 
 ## Run
 ```shell
-docker run carpet-bomb --url=http://google.com --requests=100 --concurrency=10
+docker run carpet-bomb --url=http://google.com --requests=1000 --concurrency=10
 ```
