@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
 )
 
@@ -27,20 +28,37 @@ func (lt *LoadTest) Run() {
 	ctx := context.Background()
 	defer ctx.Done()
 
-	for i := range lt.req {
-		log.Println(i)
-		doRequest(lt.url)
+	wg := &sync.WaitGroup{}
+
+	reqByWorker := lt.req / lt.concurrent
+
+	for i := range lt.concurrent {
+		wg.Add(1)
+		println("add worker: ", i)
+		go func() {
+			defer wg.Done()
+			worker(i, lt.url, reqByWorker)
+		}()
 	}
+
+	wg.Wait()
 
 	log.Println(time.Since(startTime))
 }
 
-func doRequest(url *url.URL) {
+func worker(id int, url *url.URL, totalReq int) {
+	for i := range totalReq {
+		log.Println("worker:", id, "request:", i)
+		log.Println("response code:", makeRequest(url))
+	}
+}
+
+func makeRequest(url *url.URL) int {
 
 	response, err := http.Get(url.String())
 	if err != nil {
 		log.Println(err)
-		return
+		return response.StatusCode
 	}
-	println(response.StatusCode)
+	return response.StatusCode
 }
